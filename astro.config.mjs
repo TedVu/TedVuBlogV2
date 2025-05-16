@@ -10,4 +10,5 @@ export default defineConfig({
   site: "https://example.com",
   integrations: [mdx(), sitemap(), vue()],
   output: "static",
+  prefetch: true,
 });
