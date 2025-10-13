@@ -16,7 +16,6 @@ import { SITE_TITLE } from '../consts';
 <style>
 	header {
 		margin: 0;
-		padding: 0 20em;
 	}
 	h2 {
 		margin: 0;
@@ -28,7 +27,9 @@ import { SITE_TITLE } from '../consts';
 		text-decoration: none;
 	}
 	nav {
-		display: flex;
+		@media (min-width: 760px) {
+			display: flex;
+		}
 		align-items: center;
 		justify-content: space-between;
 	}
@@ -45,10 +46,5 @@ import { SITE_TITLE } from '../consts';
 	.social-links,
 	.social-links a {
 		display: flex;
-	}
-	@media (max-width: 720px) {
-		.social-links {
-			display: none;
-		}
 	}
 </style>
