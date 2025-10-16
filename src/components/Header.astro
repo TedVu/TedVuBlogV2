@@ -15,7 +15,12 @@ import { SITE_TITLE } from '../consts';
 </header>
 <style>
 	header {
-		margin: 0;
+		padding:40px;
+
+		@media (width >= 800px) {
+			width: 760px;
+			margin: auto;
+		}
 	}
 	h2 {
 		margin: 0;
@@ -27,11 +32,7 @@ import { SITE_TITLE } from '../consts';
 		text-decoration: none;
 	}
 	nav {
-		@media (min-width: 760px) {
-			display: flex;
-		}
 		align-items: center;
-		justify-content: space-between;
 	}
 	nav a {
 		padding: 1em 0.5em;
