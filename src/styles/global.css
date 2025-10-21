@@ -33,7 +33,7 @@ main {
   max-width: calc(100% - 2em);
   margin: auto;
   min-height: 65vh;
-  padding: 3em 1em;
+  padding: 0px 1em;
 }
 
 @media (min-width: 800px) {
