@@ -35,8 +35,6 @@ main {
   min-height: 65vh;
 }
 
-@media
-
 /* If you have a header/footer wrapper, this keeps it aligned too */
 header,
 footer {
