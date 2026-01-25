@@ -1,147 +1,193 @@
-/*
-  The CSS in this style tag is based off of Bear Blog's default CSS.
-  https://github.com/HermanMartinus/bearblog/blob/297026a877bc2ab2b3bdfbd6b9f7961c350917dd/templates/styles/blog/default.css
-  License MIT: https://github.com/HermanMartinus/bearblog/blob/master/LICENSE.md
- */
+/* ---------- Reset / Base ---------- */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
 
-:root {
-  --accent: #2337ff;
-  --accent-dark: #000d8a;
-  --black: 15, 18, 25;
-  --gray: 96, 115, 159;
-  --gray-light: 229, 233, 240;
-  --gray-dark: 34, 41, 57;
-  --gray-gradient: rgba(var(--gray-light), 50%), #fff;
-  --box-shadow: 0 2px 6px rgba(var(--gray), 25%),
-    0 8px 24px rgba(var(--gray), 33%), 0 16px 32px rgba(var(--gray), 33%);
+html {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
-  font-family: "Montserrat Variable", sans-serif;
   margin: 0;
   padding: 0;
-  text-align: left;
-  background-size: 100% 600px;
-  word-wrap: break-word;
-  overflow-wrap: break-word;
-  color: rgb(var(--gray-dark));
-  background-color: rgb(189, 221, 252);
-  font-size: 20px;
+  overflow-x: hidden; /* prevents accidental horizontal scroll */
+  font-family: "Montserrat Variable", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  color: rgb(34, 41, 57);
+  background: rgb(189, 221, 252);
   line-height: 1.7;
-}
-main {
-  max-width: calc(100% - 2em);
-  margin: auto;
-  min-height: 65vh;
-  padding: 0px 1em;
+  font-size: 16px; /* mobile first */
 }
 
-@media (min-width: 800px) {
-  main {
-    width: 760px;
-  }
+/* Better selection contrast */
+::selection {
+  background: rgba(35, 55, 255, 0.18);
 }
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  margin: 0 0 0.5rem 0;
-  color: rgb(var(--black));
-  line-height: 1.2;
+
+/* ---------- Layout Container ---------- */
+main {
+  width: 100%;
+  max-width: 760px;         /* desktop content width */
+  margin: auto;
+  padding: 24px 16px;       /* mobile padding */
+  min-height: 65vh;
 }
-h1 {
-  font-size: 3.052em;
+
+/* If you have a header/footer wrapper, this keeps it aligned too */
+header,
+footer {
+  width: 100%;
 }
-h2 {
-  font-size: 2.441em;
+
+/* ---------- Typography ---------- */
+h1, h2, h3, h4, h5, h6 {
+  margin: 0 0 0.6rem 0;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  color: rgb(15, 18, 25);
 }
-h3 {
-  font-size: 1.953em;
+
+p {
+  margin: 0 0 1rem 0;
 }
-h4 {
-  font-size: 1.563em;
+
+/* Nice readable measure */
+.prose {
+  max-width: 65ch;
+  margin: 0 auto;
 }
-h5 {
-  font-size: 1.25em;
+
+/* Responsive type scale */
+h1 { font-size: clamp(2rem, 3.5vw, 3rem); }
+h2 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); }
+h3 { font-size: clamp(1.3rem, 1.8vw, 1.8rem); }
+h4 { font-size: 1.25rem; }
+h5 { font-size: 1.1rem; }
+h6 { font-size: 1rem; }
+
+small {
+  font-size: 0.9em;
+  color: rgba(34, 41, 57, 0.75);
 }
-strong,
-b {
-  font-weight: 700;
+
+/* ---------- Links ---------- */
+:root {
+  --accent: #2337ff;
+  --accent-dark: #000d8a;
+  --gray-light: 229, 233, 240;
+  --shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+  --radius: 12px;
 }
+
 a {
   color: var(--accent);
-}
-a:hover {
-  color: var(--accent);
-}
-p {
-  margin-bottom: 1em;
-}
-.prose p {
-  margin-bottom: 2em;
-}
-textarea {
-  width: 100%;
-  font-size: 16px;
-}
-input {
-  font-size: 16px;
-}
-table {
-  width: 100%;
-}
-img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 8px;
-}
-code {
-  padding: 2px 5px;
-  background-color: rgb(var(--gray-light));
-  border-radius: 2px;
-}
-pre {
-  padding: 1.5em;
-  border-radius: 8px;
-}
-pre > code {
-  all: unset;
-}
-blockquote {
-  border-left: 4px solid var(--accent);
-  padding: 0 0 0 20px;
-  margin: 0px;
-  font-size: 1.333em;
-}
-hr {
-  border: none;
-  border-top: 1px solid rgb(var(--gray-light));
-}
-@media (max-width: 720px) {
-  body {
-    font-size: 18px;
-  }
-  main {
-    padding: 1em 2em;
-  }
+  text-decoration: none;
 }
 
-.sr-only {
-  border: 0;
+a:hover {
+  text-decoration: underline;
+}
+
+/* ---------- Media ---------- */
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
+  border-radius: var(--radius);
+}
+
+/* If you embed iframes (YouTube etc.) */
+iframe {
+  max-width: 100%;
+}
+
+/* ---------- Code ---------- */
+code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-size: 0.95em;
+  background: rgb(var(--gray-light));
+  padding: 0.15em 0.35em;
+  border-radius: 6px;
+}
+
+pre {
+  margin: 0 0 1.25rem 0;
+  padding: 1rem;
+  border-radius: var(--radius);
+  overflow: auto;
+  background: rgb(var(--gray-light));
+}
+
+pre > code {
+  background: transparent;
   padding: 0;
-  margin: 0;
-  position: absolute !important;
-  height: 1px;
-  width: 1px;
+}
+
+/* ---------- Tables ---------- */
+table {
+  width: 100%;
+  border-collapse: collapse;
   overflow: hidden;
-  /* IE6, IE7 - a 0 height clip, off to the bottom right of the visible 1px box */
-  clip: rect(1px 1px 1px 1px);
-  /* maybe deprecated but we need to support legacy browsers */
-  clip: rect(1px, 1px, 1px, 1px);
-  /* modern browsers, clip-path works inwards from each corner */
-  clip-path: inset(50%);
-  /* added line to stop words getting smushed together (as they go onto separate lines and some screen readers do not understand line feeds as a space */
+  border-radius: var(--radius);
+}
+
+th, td {
+  padding: 10px 12px;
+  border-bottom: 1px solid rgba(0,0,0,0.08);
+}
+
+th {
+  text-align: left;
+}
+
+/* ---------- Quotes / HR ---------- */
+blockquote {
+  margin: 0 0 1.25rem 0;
+  padding: 0.25rem 0 0.25rem 1rem;
+  border-left: 4px solid var(--accent);
+  color: rgba(34, 41, 57, 0.9);
+}
+
+hr {
+  border: none;
+  border-top: 1px solid rgba(0,0,0,0.12);
+  margin: 2rem 0;
+}
+
+/* ---------- Forms ---------- */
+input,
+textarea,
+button {
+  font: inherit;
+}
+
+textarea,
+input {
+  width: 100%;
+}
+
+/* ---------- Utility ---------- */
+.sr-only {
+  position: absolute !important;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
   white-space: nowrap;
+  border: 0;
+}
+
+/* ---------- Responsive Tweaks ---------- */
+@media (min-width: 720px) {
+  body { font-size: 18px; }
+  main { padding: 40px 24px; }
+}
+
+@media (min-width: 1100px) {
+  body { font-size: 19px; }
 }
