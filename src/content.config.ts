@@ -16,7 +16,7 @@ const blog = defineCollection({
 });
 
 const viet = defineCollection({
-	// Load Markdown and MDX files in the `src/content/blog/` directory.
+	// Load Markdown and MDX files in the `src/content/viet/` directory.
 	loader: glob({ base: './src/content/viet', pattern: '**/*.{md,mdx}' }),
 	// Type-check frontmatter using a schema
 	schema: z.object({
@@ -26,6 +26,7 @@ const viet = defineCollection({
 		pubDate: z.coerce.date(),
 		updatedDate: z.coerce.date().optional(),
 		heroImage: z.string().optional(),
+		status: z.enum(['draft', 'published']).optional(),
 	}),
 });
 

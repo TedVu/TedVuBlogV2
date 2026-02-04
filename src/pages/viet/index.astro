@@ -6,7 +6,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
 import FormattedDate from '../../components/FormattedDate.astro';
 
-const posts = (await getCollection('viet')).sort(
+const posts = (await getCollection('viet')).filter(post => post.data.status === 'published').sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
 );
 ---
@@ -72,7 +72,7 @@ const posts = (await getCollection('viet')).sort(
 	<body>
 		<Header />
 		<main>
-			<section>
+			{ posts.length > 0 && <section>
 				<ul>
 					{
 						posts.map((post) => (
@@ -89,6 +89,8 @@ const posts = (await getCollection('viet')).sort(
 					}
 				</ul>
 			</section>
+			}
+			{ posts.length === 0 && <p>No posts found.</p> }
 		</main>
 		<Footer />
 	</body>
