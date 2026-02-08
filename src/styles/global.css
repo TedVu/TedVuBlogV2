@@ -38,7 +38,7 @@ main {
   width: 100%;
   max-width: 760px; /* desktop content width */
   margin: auto;
-  padding: 24px 16px; /* mobile padding */
+  padding: 0 16px; /* mobile padding */
   min-height: 65vh;
 }
 
@@ -213,9 +213,6 @@ input {
 @media (min-width: 720px) {
   body {
     font-size: 18px;
-  }
-  main {
-    padding: 40px 24px;
   }
 }
 
