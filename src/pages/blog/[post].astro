@@ -23,7 +23,7 @@ export async function getStaticPaths() {
 }
 
 
-const { content: body, title, publishedDate } = Astro.props;
+const { content: body } = Astro.props;
 ---
 
 <BlogPostWrapper {...Astro.props}>
