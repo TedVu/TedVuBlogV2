@@ -4,7 +4,6 @@ import Header from '../../components/Header.astro';
 import Footer from '../../components/Footer.astro';
 import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
 import { getCollection } from 'astro:content';
-import FormattedDate from '../../components/FormattedDate.astro';
 
 const posts = (await getCollection('viet')).filter(post => post.data.status === 'published').sort(
 	(a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf(),
@@ -80,9 +79,7 @@ const posts = (await getCollection('viet')).filter(post => post.data.status === 
 								<a href={`/viet/${post.id}/`}>
 									<img src={post.data.heroImage} alt="" />
 									<h4 class="title">{post.data.title}</h4>
-									<p class="date">
-										<FormattedDate date={post.data.pubDate} />
-									</p>
+
 								</a>
 							</li>
 						))
