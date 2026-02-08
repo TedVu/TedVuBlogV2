@@ -22,7 +22,7 @@ const query: EntriesQueries<BlogPost, undefined> & Record<string, any> = {
   content_type: "blogPost",
   "sys.publishedAt[exists]": true,
   "fields.slug[exists]": true,
-  order: ["-sys.publishedAt"],
+  order: "-fields.publishedDate"
 };
 
 const entries = await contentfulClient.getEntries<BlogPost>(query);
