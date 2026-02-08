@@ -18,5 +18,9 @@
     "astro": "^5.7.12",
     "contentful": "^11.10.3",
     "vue": "^3.5.13"
+  },
+  "devDependencies": {
+    "prettier": "3.8.1",
+    "prettier-plugin-astro": "0.14.1"
   }
 }

@@ -9,12 +9,12 @@ export const contentfulClient = contentful.createClient({
 });
 
 export interface BlogPost {
-    contentTypeId: "blogPost",
-    fields: {
-      title: contentful.EntryFieldTypes.Text
-      body: contentful.EntryFieldTypes.RichText,
-      publishedDate: contentful.EntryFieldTypes.Date,
-      isPublished: contentful.EntryFieldTypes.Boolean,
-      slug: contentful.EntryFieldTypes.Text,
-    }
+  contentTypeId: "blogPost";
+  fields: {
+    title: contentful.EntryFieldTypes.Text;
+    body: contentful.EntryFieldTypes.RichText;
+    publishedDate: contentful.EntryFieldTypes.Date;
+    isPublished: contentful.EntryFieldTypes.Boolean;
+    slug: contentful.EntryFieldTypes.Text;
+  };
 }

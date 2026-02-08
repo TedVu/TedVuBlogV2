@@ -1,54 +1,54 @@
 ---
-import HeaderLink from './HeaderLink.astro';
-import { SITE_TITLE } from '../consts';
+import HeaderLink from "./HeaderLink.astro";
+import { SITE_TITLE } from "../consts";
 ---
 
 <header>
-	<nav>
-		<h2><a href="/">{SITE_TITLE}</a></h2>
-		<div class="social-links">
-			<HeaderLink href="/">Home</HeaderLink>
-			<HeaderLink href="/blog">Blog</HeaderLink>
-			<HeaderLink href="/about">About</HeaderLink>
-			<HeaderLink href="/top-100">Top 100</HeaderLink>
-			<HeaderLink href="/viet">Vietpost</HeaderLink>
-
-		</div>
-	</nav>
+  <nav>
+    <h2><a href="/">{SITE_TITLE}</a></h2>
+    <div class="social-links">
+      <HeaderLink href="/">Home</HeaderLink>
+      <HeaderLink href="/blog">Blog</HeaderLink>
+      <HeaderLink href="/about">About</HeaderLink>
+      <HeaderLink href="/top-100">Top 100</HeaderLink>
+      <!-- To be enabled when there is a vietpost -->
+      <!-- <HeaderLink href="/viet">Vietpost</HeaderLink> -->
+    </div>
+  </nav>
 </header>
 <style>
-	header {
-		padding:40px;
+  header {
+    padding: 40px;
 
-		@media (width >= 800px) {
-			width: 760px;
-			margin: auto;
-		}
-	}
-	h2 {
-		margin: 0;
-		font-size: 1.5em;
-	}
+    @media (width >= 800px) {
+      width: 760px;
+      margin: auto;
+    }
+  }
+  h2 {
+    margin: 0;
+    font-size: 1.5em;
+  }
 
-	h2 a,
-	h2 a.active {
-		text-decoration: none;
-	}
-	nav {
-		align-items: center;
-	}
-	nav a {
-		padding: 1em 0.5em;
-		color: var(--black);
-		border-bottom: 4px solid transparent;
-		text-decoration: none;
-	}
-	nav a.active {
-		text-decoration: none;
-		border-bottom-color: var(--accent);
-	}
-	.social-links,
-	.social-links a {
-		display: flex;
-	}
+  h2 a,
+  h2 a.active {
+    text-decoration: none;
+  }
+  nav {
+    align-items: center;
+  }
+  nav a {
+    padding: 1em 0.5em;
+    color: var(--black);
+    border-bottom: 4px solid transparent;
+    text-decoration: none;
+  }
+  nav a.active {
+    text-decoration: none;
+    border-bottom-color: var(--accent);
+  }
+  .social-links,
+  .social-links a {
+    display: flex;
+  }
 </style>

@@ -14,7 +14,14 @@ body {
   margin: 0;
   padding: 0;
   overflow-x: hidden; /* prevents accidental horizontal scroll */
-  font-family: "Montserrat Variable", system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+  font-family:
+    "Montserrat Variable",
+    system-ui,
+    -apple-system,
+    Segoe UI,
+    Roboto,
+    Arial,
+    sans-serif;
   color: rgb(34, 41, 57);
   background: rgb(189, 221, 252);
   line-height: 1.7;
@@ -29,9 +36,9 @@ body {
 /* ---------- Layout Container ---------- */
 main {
   width: 100%;
-  max-width: 760px;         /* desktop content width */
+  max-width: 760px; /* desktop content width */
   margin: auto;
-  padding: 24px 16px;       /* mobile padding */
+  padding: 24px 16px; /* mobile padding */
   min-height: 65vh;
 }
 
@@ -42,7 +49,12 @@ footer {
 }
 
 /* ---------- Typography ---------- */
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   margin: 0 0 0.6rem 0;
   line-height: 1.15;
   letter-spacing: -0.01em;
@@ -60,12 +72,24 @@ p {
 }
 
 /* Responsive type scale */
-h1 { font-size: clamp(2rem, 3.5vw, 3rem); }
-h2 { font-size: clamp(1.6rem, 2.5vw, 2.2rem); }
-h3 { font-size: clamp(1.3rem, 1.8vw, 1.8rem); }
-h4 { font-size: 1.25rem; }
-h5 { font-size: 1.1rem; }
-h6 { font-size: 1rem; }
+h1 {
+  font-size: clamp(2rem, 3.5vw, 3rem);
+}
+h2 {
+  font-size: clamp(1.6rem, 2.5vw, 2.2rem);
+}
+h3 {
+  font-size: clamp(1.3rem, 1.8vw, 1.8rem);
+}
+h4 {
+  font-size: 1.25rem;
+}
+h5 {
+  font-size: 1.1rem;
+}
+h6 {
+  font-size: 1rem;
+}
 
 small {
   font-size: 0.9em;
@@ -106,7 +130,9 @@ iframe {
 
 /* ---------- Code ---------- */
 code {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+  font-family:
+    ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
+    monospace;
   font-size: 0.95em;
   background: rgb(var(--gray-light));
   padding: 0.15em 0.35em;
@@ -134,9 +160,10 @@ table {
   border-radius: var(--radius);
 }
 
-th, td {
+th,
+td {
   padding: 10px 12px;
-  border-bottom: 1px solid rgba(0,0,0,0.08);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
 }
 
 th {
@@ -153,7 +180,7 @@ blockquote {
 
 hr {
   border: none;
-  border-top: 1px solid rgba(0,0,0,0.12);
+  border-top: 1px solid rgba(0, 0, 0, 0.12);
   margin: 2rem 0;
 }
 
@@ -184,11 +211,16 @@ input {
 
 /* ---------- Responsive Tweaks ---------- */
 @media (min-width: 720px) {
-  body { font-size: 18px; }
-  main { padding: 40px 24px; }
+  body {
+    font-size: 18px;
+  }
+  main {
+    padding: 40px 24px;
+  }
 }
 
-
 @media (min-width: 1100px) {
-  body { font-size: 19px; }
+  body {
+    font-size: 19px;
+  }
 }

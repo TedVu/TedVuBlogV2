@@ -1,87 +1,90 @@
 ---
-import BaseHead from '../../components/BaseHead.astro';
-import Header from '../../components/Header.astro';
-import Footer from '../../components/Footer.astro';
-import { SITE_TITLE, SITE_DESCRIPTION } from '../../consts';
+import BaseHead from "../../components/BaseHead.astro";
+import Header from "../../components/Header.astro";
+import Footer from "../../components/Footer.astro";
+import { SITE_TITLE, SITE_DESCRIPTION } from "../../consts";
 import type { EntriesQueries, EntryFieldTypes } from "contentful";
 import { contentfulClient } from "../../lib/contentful";
 
 interface BlogPost {
-  contentTypeId: "blogPost",
+  contentTypeId: "blogPost";
   fields: {
-    title: EntryFieldTypes.Text
-    body: EntryFieldTypes.RichText,
-	publishedDate: EntryFieldTypes.Date,
-	isPublished: EntryFieldTypes.Boolean,
-	slug: EntryFieldTypes.Text,
-  }
+    title: EntryFieldTypes.Text;
+    body: EntryFieldTypes.RichText;
+    publishedDate: EntryFieldTypes.Date;
+    isPublished: EntryFieldTypes.Boolean;
+    slug: EntryFieldTypes.Text;
+  };
 }
-
 
 const query: EntriesQueries<BlogPost, undefined> & Record<string, any> = {
   content_type: "blogPost",
   "sys.publishedAt[exists]": true,
   "fields.slug[exists]": true,
-  order: "-fields.publishedDate"
+  order: "-fields.publishedDate",
 };
 
 const entries = await contentfulClient.getEntries<BlogPost>(query);
 
 const posts = entries.items.map((item) => {
   const { title, publishedDate, slug } = item.fields;
-	return {
-		title,
-		slug,
-		date: (() => { const d = new Date(publishedDate); return `${String(d.getDate()).padStart(2, '0')}/${String(d.getMonth() + 1).padStart(2, '0')}/${d.getFullYear()}`; })()
-	};
+  return {
+    title,
+    slug,
+    date: (() => {
+      const d = new Date(publishedDate);
+      return `${String(d.getDate()).padStart(2, "0")}/${String(d.getMonth() + 1).padStart(2, "0")}/${d.getFullYear()}`;
+    })(),
+  };
 });
-
 ---
 
 <!doctype html>
 <html lang="en">
-	<head>
-		<BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
-		<style>
-			ul {
+  <head>
+    <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      ul {
+        list-style-type: none;
+      }
+      ul li {
+        margin-bottom: 2em;
+      }
+      ul li * {
+        text-decoration: none;
+        transition: 0.2s ease;
+      }
 
-				list-style-type: none;
-			}
-			ul li {
-				margin-bottom: 2em;
-			}
-			ul li * {
-				text-decoration: none;
-				transition: 0.2s ease;
-			}
-
-			@media (max-width: 720px) {
-				ul {
-					gap: 0.5em;
-				}
-				ul li {
-					width: 100%;
-				}
-			}
-		</style>
-	</head>
-	<body>
-		<Header />
-		<main>
-			<section>
-				<ul>
-				{posts.map((post) => (
-						post ? <li>
-							<a href={`/blog/${post.slug}/`}>
-								<h2>{post.title}</h2>
-							</a>
-							<time>{post.date}</time>
-						</li> : null
-				))}
-
-				</ul>
-			</section>
-		</main>
-		<Footer />
-	</body>
+      @media (max-width: 720px) {
+        ul {
+          gap: 0.5em;
+        }
+        ul li {
+          width: 100%;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <section>
+        <ul>
+          {
+            posts.map((post) =>
+              post ? (
+                <li>
+                  <a href={`/blog/${post.slug}/`}>
+                    <h2>{post.title}</h2>
+                  </a>
+                  <time>{post.date}</time>
+                </li>
+              ) : null,
+            )
+          }
+        </ul>
+      </section>
+    </main>
+    <Footer />
+  </body>
 </html>
