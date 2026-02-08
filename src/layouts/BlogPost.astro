@@ -4,7 +4,7 @@ import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
 
 
-const { title, description, publishedDate } = Astro.props;
+const { title, description, publishedDate, heroImage } = Astro.props;
 ---
 
 <html lang="en" transition:name="root">
@@ -55,6 +55,9 @@ const { title, description, publishedDate } = Astro.props;
 		<Header />
 		<main>
 			<article>
+				<div class="hero-image">
+					{heroImage && <img src={heroImage} alt="" />}
+				</div>
 				<div class="prose">
 					<div class="title">
 						<h1>{title}</h1>
