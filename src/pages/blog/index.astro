@@ -55,6 +55,10 @@ const posts = entries.items.map((item) => {
         transition: 0.2s ease;
       }
 
+      time {
+        color: grey;
+      }
+
       @media (max-width: 720px) {
         ul {
           gap: 0.5em;
@@ -76,8 +80,8 @@ const posts = entries.items.map((item) => {
                 <li>
                   <a href={`/blog/${post.slug}/`}>
                     <h2>{post.title}</h2>
+                    <time>{post.date}</time>
                   </a>
-                  <time>{post.date}</time>
                 </li>
               ) : null,
             )
