@@ -4,9 +4,15 @@ This is Ted Vu Personal Blog
 
 # To do
 
-Background image
+Searching for posts (integrating with Algolia)
 
-Set up framework for writing and publishing blog posts
+Tags for post
+
+Comments
+
+Sharing on social media
+
+Improve SEO
 
 ## Credit
 
