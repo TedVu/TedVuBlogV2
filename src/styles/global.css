@@ -38,7 +38,7 @@ main {
   width: 100%;
   max-width: 760px; /* desktop content width */
   margin: auto;
-  padding: 0 16px; /* mobile padding */
+  padding: 0 24px; /* mobile padding */
   min-height: 65vh;
 }
 
