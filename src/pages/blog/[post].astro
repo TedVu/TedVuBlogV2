@@ -1,23 +1,40 @@
 ---
 import BlogPostWrapper from "../../layouts/BlogPost.astro";
-
 import type { BlogPost } from "../../lib/contentful";
 import { contentfulClient } from "../../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
+import { BLOCKS, type Node } from "@contentful/rich-text-types";
 
 export async function getStaticPaths() {
   const { items } = await contentfulClient.getEntries<BlogPost>({
     content_type: "blogPost",
   });
 
-  const pages = items.map((item) => ({
-    params: { post: item.fields.slug },
-    props: {
-      title: item.fields.title,
-      content: documentToHtmlString(item.fields.body),
-      publishedDate: new Date(item.fields.publishedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" }),
-    },
-  }));
+  const pages = items.map((item) => {
+    const renderOptions = {
+      renderNode: {
+        [BLOCKS.EMBEDDED_ASSET]: (node: Node) => {
+          const { file, title, description } = node.data.target.fields;
+          const url = file?.url;
+          const alt = description || title || "";
+          if (url && file.contentType?.startsWith("image/")) {
+            return `<img src="https:${url}" alt="${alt}" />`;
+          }
+          return "";
+        },
+      },
+      preserveWhitespace: true,
+    };
+
+    return {
+      params: { post: item.fields.slug },
+      props: {
+        title: item.fields.title,
+        content: documentToHtmlString(item.fields.body, renderOptions),
+        publishedDate: new Date(item.fields.publishedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" }),
+      },
+    };
+  });
   return pages;
 }
 
