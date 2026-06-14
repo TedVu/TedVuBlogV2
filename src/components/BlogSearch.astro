@@ -1,0 +1,85 @@
+---
+interface Props {
+  posts: { title: string; slug: string; date: string }[];
+}
+const { posts } = Astro.props;
+---
+
+<div>
+  <input
+    id="search-input"
+    type="search"
+    placeholder="Search posts..."
+    aria-label="Search posts"
+  />
+  <ul id="post-list">
+    {
+      posts.map((post) => (
+        <li data-title={post.title.toLowerCase()}>
+          <a href={`/blog/${post.slug}/`}>
+            <h2>{post.title}</h2>
+            <time>{post.date}</time>
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+  <p id="no-results" style="display: none; color: grey;"></p>
+</div>
+
+<script>
+  const input = document.getElementById("search-input") as HTMLInputElement;
+  const list = document.getElementById("post-list") as HTMLUListElement;
+  const noResults = document.getElementById("no-results") as HTMLParagraphElement;
+  const items = list.querySelectorAll<HTMLLIElement>("li");
+
+  input.addEventListener("input", () => {
+    const q = input.value.trim().toLowerCase();
+    let visible = 0;
+    items.forEach((item) => {
+      const match = !q || item.dataset.title!.includes(q);
+      item.style.display = match ? "" : "none";
+      if (match) visible++;
+    });
+    noResults.style.display = visible === 0 ? "" : "none";
+    noResults.textContent = `No posts found for "${input.value}".`;
+  });
+</script>
+
+<style>
+  #search-input {
+    width: 100%;
+    padding: 0.6em 1em;
+    margin-bottom: 2em;
+    border: 2px solid rgba(0, 0, 0, 0.15);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.6);
+    font-size: 1rem;
+    outline: none;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+  }
+
+  #search-input:focus {
+    border-color: #2337ff;
+  }
+
+  ul {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  ul li {
+    margin-bottom: 2em;
+  }
+
+  ul li * {
+    text-decoration: none;
+    transition: 0.2s ease;
+  }
+
+  time {
+    color: grey;
+  }
+</style>
