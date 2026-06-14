@@ -1,12 +1,20 @@
-import { getCollection } from "astro:content";
+import {contentfulClient, type BlogPost} from '../lib/contentful';
 
 export async function GET() {
-    const posts  = await getCollection("blog");
+    
+  const { items } = await contentfulClient.getEntries<BlogPost>({
+    content_type: "blogPost",
+  });
 
-    const searchIndex = posts.map((post) => ({
-        title: post.data.title,
-        description: post.data.description,
-        body: post.body,
-    }));
-    return new Response(JSON.stringify(searchIndex));
+  const searchIndex = items.map((item) => ({
+    title: item.fields.title,
+    slug: item.fields.slug,
+    body: item.fields.body,
+  }));
+
+  return new Response(JSON.stringify(searchIndex), {
+    headers: {
+        "Content-Type": "application/json",
+    },
+  });
 }
