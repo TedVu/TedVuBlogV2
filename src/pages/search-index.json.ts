@@ -1,6 +1,7 @@
+import type { APIRoute } from 'astro';
 import {contentfulClient, type BlogPost} from '../lib/contentful';
 
-export async function GET() {
+export const GET: APIRoute = async () => {
     
   const { items } = await contentfulClient.getEntries<BlogPost>({
     content_type: "blogPost",
