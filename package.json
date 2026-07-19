@@ -18,6 +18,7 @@
     "@fontsource-variable/montserrat": "^5.2.6",
     "astro": "^5.7.12",
     "contentful": "^11.10.3",
+    "fuse.js": "^7.5.0",
     "vue": "^3.5.13"
   },
   "devDependencies": {
