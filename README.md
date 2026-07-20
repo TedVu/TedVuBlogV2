@@ -6,7 +6,11 @@ This is Ted Vu Personal Blog
 
 # To do
 
-Searching for posts (integrating with Algolia)
+Searching for posts (integrating with FuseJS) => DONE
+
+Improve search with ranking FuseJS
+
+Typing improvement
 
 Tags for post
 
