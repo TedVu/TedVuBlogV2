@@ -1,7 +1,14 @@
 ---
-interface Props {
-  posts: { title: string; slug: string; date: string }[];
+interface Post {
+  title: string;
+  slug: string;
+  date: string;
 }
+
+interface Props {
+  posts: Post[];
+}
+
 const { posts } = Astro.props;
 ---
 
@@ -12,10 +19,11 @@ const { posts } = Astro.props;
     placeholder="Search posts..."
     aria-label="Search posts"
   />
+
   <ul id="post-list">
     {
       posts.map((post) => (
-        <li data-title={post.title.toLowerCase()}>
+        <li data-post-slug={post.slug}>
           <a href={`/blog/${post.slug}/`}>
             <h2>{post.title}</h2>
             <time>{post.date}</time>
@@ -24,26 +32,83 @@ const { posts } = Astro.props;
       ))
     }
   </ul>
-  <p id="no-results" style="display: none; color: grey;"></p>
+
+  <p id="no-results" hidden>No posts found</p>
 </div>
 
 <script>
-  const input = document.getElementById("search-input") as HTMLInputElement;
-  const list = document.getElementById("post-list") as HTMLUListElement;
-  const noResults = document.getElementById("no-results") as HTMLParagraphElement;
-  const items = list.querySelectorAll<HTMLLIElement>("li");
+  import { getSearchEngine } from "../utilities/search-engine";
 
-  input.addEventListener("input", () => {
-    const q = input.value.trim().toLowerCase();
-    let visible = 0;
-    items.forEach((item) => {
-      const match = !q || item.dataset.title!.includes(q);
-      item.style.display = match ? "" : "none";
-      if (match) visible++;
+  const input =
+    document.querySelector<HTMLInputElement>("#search-input");
+
+  const postElements = Array.from(
+    document.querySelectorAll<HTMLElement>("[data-post-slug]")
+  );
+
+  const noResults =
+    document.querySelector<HTMLElement>("#no-results");
+
+  function debounce<T extends (...args: any[]) => void>(
+    callback: T,
+    delay: number
+  ) {
+    let timeoutId: ReturnType<typeof setTimeout>;
+
+    return (...args: Parameters<T>) => {
+      clearTimeout(timeoutId);
+
+      timeoutId = setTimeout(() => {
+        callback(...args);
+      }, delay);
+    };
+  }
+
+  if (input && noResults) {
+    const fuse = await getSearchEngine();
+
+    const handleSearch = debounce((query: string) => {
+      const normalizedQuery = query.trim();
+
+      if (!normalizedQuery) {
+        for (const element of postElements) {
+          element.hidden = false;
+        }
+
+        noResults.hidden = true;
+        return;
+      }
+
+      const matchingSlugs = new Set(
+        fuse
+          .search(normalizedQuery)
+          .map(({ item }) => item.slug)
+      );
+
+      console.log("Matching slugs:", matchingSlugs);
+
+      let visibleCount = 0;
+
+      for (const element of postElements) {
+        const slug = element.dataset.postSlug;
+        const isMatch = Boolean(
+          slug && matchingSlugs.has(slug)
+        );
+
+        element.hidden = !isMatch;
+
+        if (isMatch) {
+          visibleCount++;
+        }
+      }
+
+      noResults.hidden = visibleCount > 0;
+    }, 200);
+
+    input.addEventListener("input", () => {
+      handleSearch(input.value);
     });
-    noResults.style.display = visible === 0 ? "" : "none";
-    noResults.textContent = `No posts found for "${input.value}".`;
-  });
+  }
 </script>
 
 <style>
