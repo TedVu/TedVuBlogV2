@@ -10,7 +10,7 @@ export const GET: APIRoute = async () => {
   const searchIndex = items.map((item) => ({
     title: item.fields.title,
     slug: item.fields.slug,
-    body: item.fields.body.content.at(0)?.content?.map((c) => c.value).join(' ') || '',
+    body: item.fields.body.content.map((contentItem) => contentItem.content.map((textItem) => textItem.value).join(' ')).join(' '),
   }));
 
   return new Response(JSON.stringify(searchIndex), {
