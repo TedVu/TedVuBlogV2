@@ -17,7 +17,7 @@ export async function getSearchEngine(): Promise<Fuse<BlogPost>> {
     const searchIndex: BlogPost[] = await response.json();
 
     const options: IFuseOptions<BlogPost> = {
-        keys: ['title', 'body'],
+        keys: ['title'],
         includeScore: true,
         threshold: 0.3,
     };

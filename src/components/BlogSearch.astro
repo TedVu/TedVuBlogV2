@@ -39,6 +39,9 @@ const { posts } = Astro.props;
 <script>
   import { getSearchEngine } from "../utilities/search-engine";
 
+
+
+  document.addEventListener('astro:page-load', async () => {
   const input =
     document.querySelector<HTMLInputElement>("#search-input");
 
@@ -109,6 +112,7 @@ const { posts } = Astro.props;
       handleSearch(input.value);
     });
   }
+});
 </script>
 
 <style>
