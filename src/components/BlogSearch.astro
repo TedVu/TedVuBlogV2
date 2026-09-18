@@ -73,6 +73,8 @@ const { posts } = Astro.props;
     const handleSearch = debounce((query: string) => {
       const normalizedQuery = query.trim();
 
+      console.log("Normalized query:", normalizedQuery);
+
       if (!normalizedQuery) {
         for (const element of postElements) {
           element.hidden = false;
@@ -82,6 +84,8 @@ const { posts } = Astro.props;
         return;
       }
 
+      console.log("Matching items:", fuse
+          .search(normalizedQuery));
       const matchingSlugs = new Set(
         fuse
           .search(normalizedQuery)
@@ -106,7 +110,7 @@ const { posts } = Astro.props;
       }
 
       noResults.hidden = visibleCount > 0;
-    }, 200);
+    }, 1000);
 
     input.addEventListener("input", () => {
       handleSearch(input.value);
