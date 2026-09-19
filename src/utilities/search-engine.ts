@@ -31,7 +31,7 @@ async function loadSearchEngine(): Promise<Fuse<SearchablePost>> {
             { name: 'body', weight: 1 },
         ],
         includeScore: true,
-        threshold: 0.3,
+        threshold: 0.1,
         // Match anywhere in the field. Without this, Fuse only accepts matches
         // within ~100 characters of the start of the field, which makes the
         // body effectively unsearchable.
