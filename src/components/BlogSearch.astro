@@ -34,14 +34,15 @@ const { posts } = Astro.props;
   </ul>
 
   <p id="no-results" hidden>No posts found</p>
+  <p id="search-error" role="alert" hidden>
+    Search is unavailable right now. Showing all posts.
+  </p>
 </div>
 
 <script>
-  import { getSearchEngine } from "../utilities/search-engine";
+  import { getSearchEngine, searchPosts } from "../utilities/search-engine";
 
-
-
-  document.addEventListener('astro:page-load', async () => {
+  document.addEventListener('astro:page-load', () => {
   const input =
     document.querySelector<HTMLInputElement>("#search-input");
 
@@ -51,6 +52,9 @@ const { posts } = Astro.props;
 
   const noResults =
     document.querySelector<HTMLElement>("#no-results");
+
+  const searchError =
+    document.querySelector<HTMLElement>("#search-error");
 
   function debounce<T extends (...args: any[]) => void>(
     callback: T,
@@ -67,32 +71,52 @@ const { posts } = Astro.props;
     };
   }
 
-  if (input && noResults) {
-    const fuse = await getSearchEngine();
+  if (input && noResults && searchError) {
+    function showAllPosts() {
+      for (const element of postElements) {
+        element.hidden = false;
+      }
 
-    const handleSearch = debounce((query: string) => {
+      noResults!.hidden = true;
+    }
+
+    // Loading the index is awaited inside the handler, so a slow first load
+    // could otherwise let an earlier keystroke overwrite a later one.
+    let latestRequestId = 0;
+
+    const handleSearch = debounce(async (query: string) => {
+      const requestId = ++latestRequestId;
       const normalizedQuery = query.trim();
 
-      console.log("Normalized query:", normalizedQuery);
-
       if (!normalizedQuery) {
-        for (const element of postElements) {
-          element.hidden = false;
-        }
-
-        noResults.hidden = true;
+        showAllPosts();
         return;
       }
 
-      console.log("Matching items:", fuse
-          .search(normalizedQuery));
-      const matchingSlugs = new Set(
-        fuse
-          .search(normalizedQuery)
-          .map(({ item }) => item.slug)
-      );
+      let fuse;
 
-      console.log("Matching slugs:", matchingSlugs);
+      try {
+        fuse = await getSearchEngine();
+      } catch (error) {
+        console.error("Failed to load the search index:", error);
+
+        if (requestId === latestRequestId) {
+          searchError!.hidden = false;
+          showAllPosts();
+        }
+
+        return;
+      }
+
+      if (requestId !== latestRequestId) {
+        return;
+      }
+
+      searchError!.hidden = true;
+
+      const matchingSlugs = new Set(
+        searchPosts(fuse, normalizedQuery).map((post) => post.slug)
+      );
 
       let visibleCount = 0;
 
@@ -109,12 +133,23 @@ const { posts } = Astro.props;
         }
       }
 
-      noResults.hidden = visibleCount > 0;
-    }, 1000);
+      noResults!.hidden = visibleCount > 0;
+    }, 250);
 
     input.addEventListener("input", () => {
       handleSearch(input.value);
     });
+
+    // Warm the index on first intent so the first search doesn't pay for it.
+    input.addEventListener(
+      "focus",
+      () => {
+        getSearchEngine().catch(() => {
+          /* Reported when a search actually runs. */
+        });
+      },
+      { once: true }
+    );
   }
 });
 </script>
@@ -154,5 +189,9 @@ const { posts } = Astro.props;
 
   time {
     color: grey;
+  }
+
+  #search-error {
+    color: #8a1c1c;
   }
 </style>
