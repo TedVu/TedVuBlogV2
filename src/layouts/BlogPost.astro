@@ -2,8 +2,12 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import LikeButton from "../components/LikeButton.vue";
 
 const { title, description, publishedDate, heroImage } = Astro.props;
+// "/blog/my-slug/" -> "blog/my-slug"
+const postKey = Astro.url.pathname.replace(/^\/|\/$/g, "");
+const isPost = /^(blog|viet)\/[^/]+$/.test(postKey);
 ---
 
 <html lang="en" transition:name="root">
@@ -64,6 +68,7 @@ const { title, description, publishedDate, heroImage } = Astro.props;
             <hr />
           </div>
           <slot />
+          {isPost && <LikeButton client:visible postKey={postKey} />}
         </div>
       </article>
     </main>
