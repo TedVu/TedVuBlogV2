@@ -2,7 +2,26 @@
 import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
+import TopLiked from "../components/TopLiked.vue";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { getCollection } from "astro:content";
+import { contentfulClient, type BlogPost } from "../lib/contentful";
+
+// Post key -> title for every published post, so the list of most liked posts
+// can show titles for the keys the likes API returns.
+const { items } = await contentfulClient.getEntries<BlogPost>({
+  content_type: "blogPost",
+  "sys.publishedAt[exists]": true,
+  "fields.slug[exists]": true,
+  limit: 1000,
+} as any);
+const vietPosts = (await getCollection("viet")).filter(
+  (post) => post.data.status === "published",
+);
+const titles: Record<string, string> = Object.fromEntries([
+  ...items.map((item) => [`blog/${item.fields.slug}`, item.fields.title]),
+  ...vietPosts.map((post) => [`viet/${post.id}`, post.data.title]),
+]);
 ---
 
 <!doctype html>
@@ -18,6 +37,7 @@ import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
         This is where I jogged down my thoughts about all the interests of mine,
         hope you will enjoy it!
       </p>
+      <TopLiked client:load titles={titles} />
     </main>
     <Footer />
   </body>

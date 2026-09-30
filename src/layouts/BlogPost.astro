@@ -65,6 +65,7 @@ const isPost = /^(blog|viet)\/[^/]+$/.test(postKey);
           <div class="title">
             <h1>{title}</h1>
             <div>{publishedDate}</div>
+            {isPost && <LikeButton client:load postKey={postKey} position="top" />}
             <hr />
           </div>
           <slot />

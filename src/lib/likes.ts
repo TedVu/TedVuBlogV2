@@ -36,3 +36,15 @@ export async function hashVoter(ip: string): Promise<string> {
   const digest = await crypto.subtle.digest("SHA-256", data);
   return Array.from(new Uint8Array(digest), (b) => b.toString(16).padStart(2, "0")).join("");
 }
+
+export async function getTopLikes(limit: number): Promise<{ postKey: string; count: number }[]> {
+  const flat = await redis.zrange<(string | number)[]>(LIKES_KEY, 0, limit - 1, {
+    rev: true,
+    withScores: true,
+  });
+  const top: { postKey: string; count: number }[] = [];
+  for (let i = 0; i < flat.length; i += 2) {
+    top.push({ postKey: String(flat[i]), count: Number(flat[i + 1]) });
+  }
+  return top;
+}

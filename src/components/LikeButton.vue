@@ -1,7 +1,10 @@
 <script setup lang="ts">
-import { onMounted, ref } from "vue";
+import { onMounted, onUnmounted, ref } from "vue";
 
-const props = defineProps<{ postKey: string }>();
+const props = withDefaults(
+  defineProps<{ postKey: string; position?: "top" | "bottom" }>(),
+  { position: "bottom" },
+);
 
 const storageKey = `liked:${props.postKey}`;
 const endpoint = `/api/likes/${props.postKey}`;
@@ -9,7 +12,33 @@ const count = ref<number | null>(null);
 const liked = ref(false);
 const pending = ref(false);
 
+// Keep multiple buttons for the same post (top and bottom) in sync.
+const syncEvent = `like-sync:${props.postKey}`;
+const instanceId = Math.random().toString(36).slice(2);
+type SyncState = { liked: boolean; count: number | null; pending: boolean };
+
+function broadcast() {
+  const detail: SyncState & { source: string } = {
+    liked: liked.value,
+    count: count.value,
+    pending: pending.value,
+    source: instanceId,
+  };
+  window.dispatchEvent(new CustomEvent(syncEvent, { detail }));
+}
+
+function onSync(e: Event) {
+  const detail = (e as CustomEvent<SyncState & { source: string }>).detail;
+  if (detail.source === instanceId) return;
+  liked.value = detail.liked;
+  count.value = detail.count;
+  pending.value = detail.pending;
+}
+
+onUnmounted(() => window.removeEventListener(syncEvent, onSync));
+
 onMounted(async () => {
+  window.addEventListener(syncEvent, onSync);
   try {
     liked.value = localStorage.getItem(storageKey) === "1";
   } catch {}
@@ -25,6 +54,7 @@ async function like() {
   liked.value = true;
   pending.value = true;
   count.value = previous + 1;
+  broadcast();
   try {
     const res = await fetch(endpoint, { method: "POST" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
@@ -37,12 +67,13 @@ async function like() {
     count.value = previous;
   } finally {
     pending.value = false;
+    broadcast();
   }
 }
 </script>
 
 <template>
-  <div class="like">
+  <div class="like" :class="position">
     <button
       type="button"
       :class="{ liked }"
@@ -58,7 +89,7 @@ async function like() {
       </svg>
       <span class="count">{{ count ?? "–" }}</span>
     </button>
-    <span class="prompt">{{
+    <span v-if="position === 'bottom'" class="prompt">{{
       liked ? "Thanks for reading!" : "Enjoyed this post?"
     }}</span>
   </div>
@@ -69,9 +100,15 @@ async function like() {
   display: flex;
   align-items: center;
   gap: 1em;
+}
+.like.bottom {
   margin-top: 2.5em;
   padding-top: 1.5em;
   border-top: 1px solid rgba(0, 0, 0, 0.12);
+}
+.like.top {
+  justify-content: center;
+  margin-top: 1em;
 }
 button {
   display: inline-flex;
