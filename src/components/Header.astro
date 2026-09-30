@@ -1,9 +1,13 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
+import ActiveReaders from "./ActiveReaders.vue";
 import { SITE_TITLE } from "../consts";
 ---
 
 <header>
+  <div class="presence">
+    <ActiveReaders client:idle transition:persist="active-readers" />
+  </div>
   <nav>
     <h2>
       <a href="/">{SITE_TITLE}</a>
@@ -26,6 +30,10 @@ import { SITE_TITLE } from "../consts";
       width: 760px;
       margin: auto;
     }
+  }
+  .presence {
+    min-height: 1.5em;
+    text-align: right;
   }
   h2 {
     margin: 0;

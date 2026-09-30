@@ -1,9 +1,4 @@
-import { Redis } from "@upstash/redis";
-
-const redis = new Redis({
-  url: import.meta.env.UPSTASH_REDIS_REST_URL,
-  token: import.meta.env.UPSTASH_REDIS_REST_TOKEN,
-});
+import { redis } from "./redis";
 
 // Sorted set: member = post key (e.g. "blog/my-slug"), score = like count.
 const LIKES_KEY = "likes";
