@@ -16,6 +16,22 @@
   --radius: 12px;
 }
 
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --color-bg: rgb(15 23 42);
+  --color-surface: rgb(30 41 59);
+  --color-input-bg: rgb(30 41 59);
+  --color-text: rgb(214 226 240);
+  --color-heading: rgb(241 245 250);
+  --color-muted: rgb(214 226 240 / 0.7);
+  --color-border: rgb(255 255 255 / 0.1);
+  --color-border-strong: rgb(255 255 255 / 0.18);
+  --color-selection: rgb(139 155 255 / 0.3);
+  --accent: #8b9bff;
+  --accent-dark: #b4bfff;
+  --shadow: 0 6px 18px rgb(0 0 0 / 0.4);
+}
+
 /* ---------- Reset / Base ---------- */
 *,
 *::before,

@@ -18,6 +18,49 @@ const { title, description } = Astro.props;
 <!-- Global Metadata -->
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+
+<!-- Theme: set data-theme before first paint (see ThemeToggle.astro) -->
+<script is:inline>
+  (() => {
+    const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    const getStoredTheme = () => {
+      try {
+        const theme = localStorage.getItem("theme");
+        return theme === "light" || theme === "dark" ? theme : null;
+      } catch {
+        return null;
+      }
+    };
+
+    const resolveTheme = () =>
+      getStoredTheme() ?? (darkQuery.matches ? "dark" : "light");
+
+    document.documentElement.dataset.theme = resolveTheme();
+
+    // ClientRouter keeps this script across swaps; register listeners once.
+    if (window.__themeListenersRegistered) return;
+    window.__themeListenersRegistered = true;
+
+    // Carry the current theme onto the incoming page before it paints.
+    document.addEventListener("astro:before-swap", (event) => {
+      event.newDocument.documentElement.dataset.theme =
+        document.documentElement.dataset.theme ?? resolveTheme();
+    });
+
+    // Fallback in case the incoming document's theme was not set.
+    document.addEventListener("astro:after-swap", () => {
+      document.documentElement.dataset.theme ??= resolveTheme();
+    });
+
+    // Follow OS changes until the reader picks a theme.
+    darkQuery.addEventListener("change", () => {
+      if (!getStoredTheme()) {
+        document.documentElement.dataset.theme = resolveTheme();
+      }
+    });
+  })();
+</script>
 <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
 <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
 <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
