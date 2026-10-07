@@ -1,6 +1,7 @@
 ---
 import HeaderLink from "./HeaderLink.astro";
 import ActiveReaders from "./ActiveReaders.vue";
+import ThemeToggle from "./ThemeToggle.astro";
 import { SITE_TITLE } from "../consts";
 ---
 
@@ -19,6 +20,7 @@ import { SITE_TITLE } from "../consts";
       <HeaderLink href="/top-100">Top 100</HeaderLink>
       <!-- To be enabled when there is a vietpost -->
       <!-- <HeaderLink href="/viet">Vietpost</HeaderLink> -->
+      <ThemeToggle />
     </div>
   </nav>
 </header>
@@ -50,6 +52,7 @@ import { SITE_TITLE } from "../consts";
   nav a {
     padding: 1em 0.5em;
     color: inherit;
+    white-space: nowrap;
     border-bottom: 4px solid transparent;
     text-decoration: none;
   }
@@ -60,5 +63,8 @@ import { SITE_TITLE } from "../consts";
   .social-links,
   .social-links a {
     display: flex;
+  }
+  .social-links {
+    flex-wrap: wrap;
   }
 </style>
