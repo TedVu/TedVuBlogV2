@@ -159,9 +159,10 @@ const { posts } = Astro.props;
     width: 100%;
     padding: 0.6em 1em;
     margin-bottom: 2em;
-    border: 2px solid rgba(0, 0, 0, 0.15);
+    border: 2px solid var(--color-border-strong);
     border-radius: 8px;
-    background: rgba(255, 255, 255, 0.6);
+    background: var(--color-input-bg);
+    color: var(--color-text);
     font-size: 1rem;
     outline: none;
     transition: border-color 0.2s;
@@ -169,7 +170,7 @@ const { posts } = Astro.props;
   }
 
   #search-input:focus {
-    border-color: #2337ff;
+    border-color: var(--accent);
   }
 
   ul {
@@ -188,7 +189,7 @@ const { posts } = Astro.props;
   }
 
   time {
-    color: grey;
+    color: var(--color-muted);
   }
 
   #search-error {

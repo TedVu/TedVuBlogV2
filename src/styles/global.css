@@ -1,3 +1,21 @@
+/* ---------- Theme Tokens ---------- */
+:root {
+  color-scheme: light;
+  --color-bg: rgb(189 221 252);
+  --color-surface: rgb(229 233 240);
+  --color-input-bg: rgb(255 255 255 / 0.6);
+  --color-text: rgb(34 41 57);
+  --color-heading: rgb(15 18 25);
+  --color-muted: rgb(34 41 57 / 0.75);
+  --color-border: rgb(0 0 0 / 0.08);
+  --color-border-strong: rgb(0 0 0 / 0.15);
+  --color-selection: rgb(35 55 255 / 0.18);
+  --accent: #2337ff;
+  --accent-dark: #000d8a;
+  --shadow: 0 6px 18px rgb(0 0 0 / 0.12);
+  --radius: 12px;
+}
+
 /* ---------- Reset / Base ---------- */
 *,
 *::before,
@@ -22,15 +40,15 @@ body {
     Roboto,
     Arial,
     sans-serif;
-  color: rgb(34, 41, 57);
-  background: rgb(189, 221, 252);
+  color: var(--color-text);
+  background: var(--color-bg);
   line-height: 1.7;
   font-size: 16px; /* mobile first */
 }
 
 /* Better selection contrast */
 ::selection {
-  background: rgba(35, 55, 255, 0.18);
+  background: var(--color-selection);
 }
 
 /* ---------- Layout Container ---------- */
@@ -58,7 +76,7 @@ h6 {
   margin: 0 0 0.6rem 0;
   line-height: 1.15;
   letter-spacing: -0.01em;
-  color: rgb(15, 18, 25);
+  color: var(--color-heading);
 }
 
 p {
@@ -93,17 +111,10 @@ h6 {
 
 small {
   font-size: 0.9em;
-  color: rgba(34, 41, 57, 0.75);
+  color: var(--color-muted);
 }
 
 /* ---------- Links ---------- */
-:root {
-  --accent: #2337ff;
-  --accent-dark: #000d8a;
-  --gray-light: 229, 233, 240;
-  --shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
-  --radius: 12px;
-}
 
 a {
   color: var(--accent);
@@ -134,7 +145,7 @@ code {
     ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono",
     monospace;
   font-size: 0.95em;
-  background: rgb(var(--gray-light));
+  background: var(--color-surface);
   padding: 0.15em 0.35em;
   border-radius: 6px;
 }
@@ -144,7 +155,7 @@ pre {
   padding: 1rem;
   border-radius: var(--radius);
   overflow: auto;
-  background: rgb(var(--gray-light));
+  background: var(--color-surface);
 }
 
 pre > code {
@@ -163,7 +174,7 @@ table {
 th,
 td {
   padding: 10px 12px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  border-bottom: 1px solid var(--color-border);
 }
 
 th {
@@ -175,12 +186,12 @@ blockquote {
   margin: 0 0 1.25rem 0;
   padding: 0.25rem 0 0.25rem 1rem;
   border-left: 4px solid var(--accent);
-  color: rgba(34, 41, 57, 0.9);
+  color: color-mix(in srgb, var(--color-text) 90%, transparent);
 }
 
 hr {
   border: none;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
+  border-top: 1px solid var(--color-border-strong);
   margin: 2rem 0;
 }
 
