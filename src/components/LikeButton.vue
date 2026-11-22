@@ -1,3 +1,21 @@
+<script lang="ts">
+// Module scope is shared by every island on the page, so the top and bottom
+// buttons reuse one request instead of each fetching on hydrate.
+const inflight = new Map<string, Promise<number | null>>();
+
+function fetchCount(endpoint: string): Promise<number | null> {
+  let request = inflight.get(endpoint);
+  if (!request) {
+    request = fetch(endpoint)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((body) => (typeof body?.count === "number" ? body.count : null))
+      .catch(() => null);
+    inflight.set(endpoint, request);
+  }
+  return request;
+}
+</script>
+
 <script setup lang="ts">
 import { onMounted, onUnmounted, ref } from "vue";
 
@@ -7,6 +25,7 @@ const props = withDefaults(
 );
 
 const storageKey = `liked:${props.postKey}`;
+const countKey = `likes:${props.postKey}`;
 const endpoint = `/api/likes/${props.postKey}`;
 const count = ref<number | null>(null);
 const liked = ref(false);
@@ -37,15 +56,24 @@ function onSync(e: Event) {
 
 onUnmounted(() => window.removeEventListener(syncEvent, onSync));
 
+function saveCount(value: number) {
+  try {
+    localStorage.setItem(countKey, String(value));
+  } catch {}
+}
+
 onMounted(async () => {
   window.addEventListener(syncEvent, onSync);
   try {
     liked.value = localStorage.getItem(storageKey) === "1";
+    const cached = Number(localStorage.getItem(countKey) ?? NaN);
+    if (Number.isFinite(cached)) count.value = cached;
   } catch {}
-  try {
-    const res = await fetch(endpoint);
-    if (res.ok) count.value = (await res.json()).count;
-  } catch {}
+  const fresh = await fetchCount(endpoint);
+  if (fresh !== null && !pending.value) {
+    count.value = fresh;
+    saveCount(fresh);
+  }
 });
 
 async function like() {
@@ -59,6 +87,8 @@ async function like() {
     const res = await fetch(endpoint, { method: "POST" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     count.value = (await res.json()).count;
+    saveCount(count.value!);
+    inflight.set(endpoint, Promise.resolve(count.value));
     try {
       localStorage.setItem(storageKey, "1");
     } catch {}
@@ -150,7 +180,7 @@ svg {
 }
 .prompt {
   font-size: 0.95em;
-  color: rgba(34, 41, 57, 0.75);
+  color: var(--color-muted);
 }
 @keyframes pop {
   50% {

@@ -85,6 +85,6 @@ onUnmounted(() => {
 .active-readers {
   font-size: 0.85em;
   font-style: italic;
-  color: rgba(34, 41, 57, 0.75);
+  color: var(--color-muted);
 }
 </style>

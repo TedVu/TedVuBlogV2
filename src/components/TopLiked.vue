@@ -72,6 +72,6 @@ svg {
   fill: currentColor;
 }
 .muted {
-  color: rgba(34, 41, 57, 0.75);
+  color: var(--color-muted);
 }
 </style>
