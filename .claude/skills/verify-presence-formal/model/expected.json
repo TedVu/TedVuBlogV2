@@ -1,0 +1,32 @@
+{
+  "checks": {
+    "timing": {
+      "question": "One tab, never reloaded: is a reader who keeps the page visible ever dropped from the count?",
+      "tabs": ["t1"],
+      "allowReopen": false,
+      "rules": ["NoFalseDrop"],
+      "expect": { "outcome": "pass" }
+    },
+    "multi-tab": {
+      "question": "Two tabs of one browser: does closing one tab drop a reader who is still looking at the other?",
+      "tabs": ["t1", "t2"],
+      "allowReopen": false,
+      "rules": ["NoFalseDrop"],
+      "expect": { "outcome": "violates", "rule": "NoFalseDrop", "finding": "F1" }
+    },
+    "reload": {
+      "question": "One tab, reloaded: does the old page's leave beacon drop the reader the new page just counted?",
+      "tabs": ["t1"],
+      "allowReopen": true,
+      "rules": ["NoFalseDrop"],
+      "expect": { "outcome": "violates", "rule": "NoFalseDrop", "finding": "F2" }
+    },
+    "leave": {
+      "question": "Closing the last tab: is the reader always gone once every request has arrived?",
+      "tabs": ["t1"],
+      "allowReopen": false,
+      "rules": ["LeaveIsFinal"],
+      "expect": { "outcome": "violates", "rule": "LeaveIsFinal", "finding": "F3" }
+    }
+  }
+}

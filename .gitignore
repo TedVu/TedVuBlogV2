@@ -25,3 +25,7 @@ pnpm-debug.log*
 
 # Local Netlify folder
 .netlify
+
+# verification harness (verify-tedvublog skill)
+.verify/
+.claude/skills/verify-tedvublog/node_modules/

@@ -1,0 +1,9 @@
+{
+  "name": "verify-tedvublog-harness",
+  "private": true,
+  "type": "module",
+  "description": "Browser harness for the verify-tedvublog skill. Not part of the site build.",
+  "dependencies": {
+    "playwright-core": "1.57.0"
+  }
+}
