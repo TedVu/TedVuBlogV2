@@ -101,15 +101,6 @@ async function like() {
   align-items: center;
   gap: 1em;
 }
-.like.bottom {
-  margin-top: 2.5em;
-  padding-top: 1.5em;
-  border-top: 1px solid rgba(0, 0, 0, 0.12);
-}
-.like.top {
-  justify-content: center;
-  margin-top: 1em;
-}
 button {
   display: inline-flex;
   align-items: center;

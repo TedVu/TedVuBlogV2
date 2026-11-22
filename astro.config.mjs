@@ -12,7 +12,7 @@ const isDev = process.argv.includes("dev");
 
 // https://astro.build/config
 export default defineConfig({
-  site: "https://example.com",
+  site: "https://tedvu.com",
   integrations: [mdx(), sitemap(), vue()],
   output: "static",
   adapter: isDev ? undefined : netlify(),

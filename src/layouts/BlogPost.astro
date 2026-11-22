@@ -3,16 +3,33 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import LikeButton from "../components/LikeButton.vue";
+import ShareButtons from "../components/ShareButtons.astro";
 
-const { title, description, publishedDate, heroImage } = Astro.props;
+const { title, description, publishedDate, heroImage, image } = Astro.props;
 // "/blog/my-slug/" -> "blog/my-slug"
 const postKey = Astro.url.pathname.replace(/^\/|\/$/g, "");
 const isPost = /^(blog|viet)\/[^/]+$/.test(postKey);
+const isViet = postKey.startsWith("viet/");
+// Same value BaseHead uses for the canonical link and og:url.
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
+
+// Contentful posts pass `image`; /viet/ posts fall back to their hero image.
+const previewImage =
+  image ??
+  (isViet && heroImage
+    ? { url: new URL(heroImage, Astro.site).href, alt: title }
+    : undefined);
 ---
 
-<html lang="en" transition:name="root">
+<html lang="en" data-theme="dark" transition:name="root">
   <head>
-    <BaseHead title={title} description={description} />
+    <BaseHead
+      title={title}
+      description={description}
+      image={previewImage}
+      type={isPost ? "article" : "website"}
+      locale={isViet ? "vi_VN" : "en_US"}
+    />
     <style>
       main {
         width: 80%;
@@ -51,6 +68,21 @@ const isPost = /^(blog|viet)\/[^/]+$/.test(postKey);
       .last-updated-on {
         font-style: italic;
       }
+      .post-actions {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        gap: 1em;
+      }
+      .post-actions.top {
+        justify-content: center;
+        margin-top: 1em;
+      }
+      .post-actions.bottom {
+        margin-top: 2.5em;
+        padding-top: 1.5em;
+        border-top: 1px solid rgba(0, 0, 0, 0.12);
+      }
     </style>
   </head>
 
@@ -65,11 +97,25 @@ const isPost = /^(blog|viet)\/[^/]+$/.test(postKey);
           <div class="title">
             <h1>{title}</h1>
             <div>{publishedDate}</div>
-            {isPost && <LikeButton client:load postKey={postKey} position="top" />}
+            {
+              isPost && (
+                <div class="post-actions top">
+                  <LikeButton client:load postKey={postKey} position="top" />
+                  <ShareButtons url={canonicalURL} title={title} position="top" />
+                </div>
+              )
+            }
             <hr />
           </div>
           <slot />
-          {isPost && <LikeButton client:visible postKey={postKey} />}
+          {
+            isPost && (
+              <div class="post-actions bottom">
+                <LikeButton client:visible postKey={postKey} />
+                <ShareButtons url={canonicalURL} title={title} position="bottom" />
+              </div>
+            )
+          }
         </div>
       </article>
     </main>

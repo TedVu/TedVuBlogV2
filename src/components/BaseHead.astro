@@ -2,17 +2,42 @@
 // Import the global.css file here so that it is included on
 // all pages through the use of the <BaseHead /> component.
 import "../styles/global.css";
-import { SITE_TITLE } from "../consts";
+import { SITE_DESCRIPTION, SITE_TITLE } from "../consts";
 import { ClientRouter } from "astro:transitions";
 // Supports weights 100-900
 import "@fontsource-variable/montserrat";
-interface Props {
-  title: string;
-  description: string;
-  image?: string;
+export interface PageImage {
+  url: string;
+  alt: string;
+  width?: number;
+  height?: number;
 }
 
-const { title, description } = Astro.props;
+interface Props {
+  title: string;
+  description?: string;
+  image?: PageImage;
+  type?: "website" | "article";
+  locale?: string;
+}
+
+const {
+  title,
+  description: pageDescription,
+  image: pageImage,
+  type = "website",
+  locale = "en_US",
+} = Astro.props;
+
+const description = pageDescription?.trim() || SITE_DESCRIPTION;
+const image: PageImage = pageImage ?? {
+  url: new URL("/og-default.jpg", Astro.site).href,
+  alt: SITE_TITLE,
+  width: 1200,
+  height: 630,
+};
+// The page's own path on the production origin, never a query string.
+const canonicalURL = new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!-- Global Metadata -->
@@ -22,8 +47,6 @@ const { title, description } = Astro.props;
 <!-- Theme: set data-theme before first paint (see ThemeToggle.astro) -->
 <script is:inline>
   (() => {
-    const darkQuery = window.matchMedia("(prefers-color-scheme: dark)");
-
     const getStoredTheme = () => {
       try {
         const theme = localStorage.getItem("theme");
@@ -33,8 +56,8 @@ const { title, description } = Astro.props;
       }
     };
 
-    const resolveTheme = () =>
-      getStoredTheme() ?? (darkQuery.matches ? "dark" : "light");
+    // Dark is the default; light only when the reader has chosen it.
+    const resolveTheme = () => getStoredTheme() ?? "dark";
 
     document.documentElement.dataset.theme = resolveTheme();
 
@@ -51,13 +74,6 @@ const { title, description } = Astro.props;
     // Fallback in case the incoming document's theme was not set.
     document.addEventListener("astro:after-swap", () => {
       document.documentElement.dataset.theme ??= resolveTheme();
-    });
-
-    // Follow OS changes until the reader picks a theme.
-    darkQuery.addEventListener("change", () => {
-      if (!getStoredTheme()) {
-        document.documentElement.dataset.theme = resolveTheme();
-      }
     });
   })();
 </script>
@@ -77,4 +93,18 @@ const { title, description } = Astro.props;
 <title>{title}</title>
 <meta name="title" content={title} />
 <meta name="description" content={description} />
+<link rel="canonical" href={canonicalURL} />
+
+<!-- Open Graph / link previews -->
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonicalURL} />
+<meta property="og:type" content={type} />
+<meta property="og:site_name" content={SITE_TITLE} />
+<meta property="og:locale" content={locale} />
+<meta property="og:image" content={image.url} />
+<meta property="og:image:alt" content={image.alt} />
+{image.width && <meta property="og:image:width" content={String(image.width)} />}
+{image.height && <meta property="og:image:height" content={String(image.height)} />}
+<meta name="twitter:card" content="summary_large_image" />
 <ClientRouter />

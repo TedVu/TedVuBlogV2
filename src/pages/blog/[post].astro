@@ -1,7 +1,11 @@
 ---
 import BlogPostWrapper from "../../layouts/BlogPost.astro";
 import type { BlogPost } from "../../lib/contentful";
-import { contentfulClient } from "../../lib/contentful";
+import {
+  contentfulClient,
+  firstImageAsset,
+  plainTextExcerpt,
+} from "../../lib/contentful";
 import { documentToHtmlString } from "@contentful/rich-text-html-renderer";
 import { BLOCKS, type Node } from "@contentful/rich-text-types";
 
@@ -26,10 +30,21 @@ export async function getStaticPaths() {
       preserveWhitespace: true,
     };
 
+    const previewAsset = firstImageAsset(item.fields.body);
+    const image = previewAsset && {
+      // Contentful's Images API crops to exactly 1200×630 as a JPEG.
+      url: `https:${previewAsset.url}?w=1200&h=630&fit=fill&fm=jpg&q=80`,
+      alt: previewAsset.description || previewAsset.title || item.fields.title,
+      width: 1200,
+      height: 630,
+    };
+
     return {
       params: { post: item.fields.slug },
       props: {
         title: item.fields.title,
+        description: plainTextExcerpt(item.fields.body),
+        image,
         content: documentToHtmlString(item.fields.body, renderOptions),
         publishedDate: new Date(item.fields.publishedDate).toLocaleDateString("en-GB", { day: "2-digit", month: "2-digit", year: "numeric" }),
       },

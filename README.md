@@ -1,21 +1,14 @@
-[![Netlify Status](https://api.netlify.com/api/v1/badges/3103acca-efc2-4ba0-9e15-488b3a5de49e/deploy-status)](https://app.netlify.com/projects/tedvublog/deploys)
-
 # Ted Vu Personal Blog
 
-This is Ted Vu Personal Blog
+[![Netlify Status](https://api.netlify.com/api/v1/badges/3103acca-efc2-4ba0-9e15-488b3a5de49e/deploy-status)](https://app.netlify.com/projects/tedvublog/deploys)
 
-# To do
+This is Ted Vu's personal blog.
 
-Searching for posts (integrating with FuseJS) => DONE
+## Roadmap
 
-Improve search with ranking FuseJS
-
-Typing improvement
-
-Tags for post
-
-Comments
-
-Sharing on social media
-
-Improve SEO
+- [x] Search for posts (FuseJS integration)
+- [x] Improve search ranking with FuseJS
+- [ ] Tags for posts
+- [ ] Comments
+- [ ] Sharing on social media
+- [ ] Improve SEO
